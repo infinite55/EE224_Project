@@ -1,0 +1,30 @@
+//Multiplier
+module mul(input signed [16:0] a, input signed [16:0] b, output reg signed  [16:0] d);
+ 
+    reg signed [33:0] sum;
+
+    always @* begin
+      sum = a * b ;
+      d = sum >>> 15;
+	end
+  
+endmodule
+
+
+//Complex Multiplication
+module cmul(input signed [16:0] x1, 
+	 input signed [16:0] y1, 
+	 input signed [16:0] x2, 
+	 input signed [16:0] y2,
+	 output reg signed [16:0] a1, 
+	 output reg signed [16:0] b1);
+	 wire signed [16:0] w[3:0];
+	 mul m0(x2,x1,w[0]);
+	 mul m1(y2,y1,w[1]);
+	 mul m2(x1,y2,w[2]);
+	 mul m3(x2,y1,w[3]);
+	 always @(*) begin
+		 a1 <= w[0] - w[1];
+		 b1 <= w[2] + w[3];
+	 end
+endmodule
